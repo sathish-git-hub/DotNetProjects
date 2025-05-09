@@ -1,0 +1,19 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+- script: |
+    cd frontend
+    npm install
+    npm run build
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '<your-connection>'
+    appName: '<frontend-app-name>'
+    package: '$(System.DefaultWorkingDirectory)/frontend/build'
