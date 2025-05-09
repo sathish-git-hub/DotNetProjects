@@ -1,0 +1,17 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: '6.x'
+- script: dotnet build
+- script: dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '<your-connection>'
+    appName: '<backend-app-name>'
+    package: '$(Build.ArtifactStagingDirectory)'
